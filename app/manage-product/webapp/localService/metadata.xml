@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="ProductService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="ServiceLog" EntityType="ProductService.ServiceLog"/>
+                <EntitySet Name="Product" EntityType="ProductService.Product">
+                    <NavigationPropertyBinding Path="Categories" Target="Category"/>
+                    <NavigationPropertyBinding Path="Suppliers" Target="Supplier"/>
+                </EntitySet>
+                <EntitySet Name="Supplier" EntityType="ProductService.Supplier"/>
+                <EntitySet Name="Category" EntityType="ProductService.Category">
+                    <NavigationPropertyBinding Path="Products" Target="Product"/>
+                </EntitySet>
+            </EntityContainer>
+            <EntityType Name="ServiceLog">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="type" Type="Edm.String" MaxLength="12"/>
+                <Property Name="user" Type="Edm.String" MaxLength="80"/>
+                <Property Name="ldate" Type="Edm.Date"/>
+                <Property Name="ltime" Type="Edm.TimeOfDay"/>
+                <Property Name="message" Type="Edm.String" MaxLength="100"/>
+            </EntityType>
+            <EntityType Name="Product">
+                <Key>
+                    <PropertyRef Name="ProductID"/>
+                </Key>
+                <Property Name="ProductID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="ProductName" Type="Edm.String" MaxLength="40" Nullable="false"/>
+                <Property Name="SupplierID" Type="Edm.Int32"/>
+                <Property Name="CategoryID" Type="Edm.Int32"/>
+                <Property Name="QuantityPerUnit" Type="Edm.String" MaxLength="20"/>
+                <Property Name="UnitPrice" Type="Edm.Decimal" Scale="4" Precision="19"/>
+                <Property Name="UnitsInStock" Type="Edm.Int16"/>
+                <Property Name="UnitsOnOrder" Type="Edm.Int16"/>
+                <Property Name="ReorderLevel" Type="Edm.Int16"/>
+                <Property Name="Discontinued" Type="Edm.Boolean"/>
+                <NavigationProperty Name="Categories" Type="ProductService.Category">
+                    <ReferentialConstraint Property="CategoryID" ReferencedProperty="CategoryID"/>
+                </NavigationProperty>
+                <NavigationProperty Name="Suppliers" Type="ProductService.Supplier">
+                    <ReferentialConstraint Property="SupplierID" ReferencedProperty="SupplierID"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="Supplier">
+                <Key>
+                    <PropertyRef Name="SupplierID"/>
+                </Key>
+                <Property Name="SupplierID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="CompanyName" Type="Edm.String" MaxLength="40"/>
+                <Property Name="ContactName" Type="Edm.String" MaxLength="30"/>
+                <Property Name="ContactTitle" Type="Edm.String" MaxLength="30"/>
+                <Property Name="Address" Type="Edm.String" MaxLength="60"/>
+                <Property Name="City" Type="Edm.String" MaxLength="15"/>
+                <Property Name="Region" Type="Edm.String" MaxLength="15"/>
+                <Property Name="PostalCode" Type="Edm.String" MaxLength="10"/>
+                <Property Name="Country" Type="Edm.String" MaxLength="15"/>
+                <Property Name="Phone" Type="Edm.String" MaxLength="24"/>
+                <Property Name="Fax" Type="Edm.String" MaxLength="24"/>
+                <Property Name="HomePage" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="Category">
+                <Key>
+                    <PropertyRef Name="CategoryID"/>
+                </Key>
+                <Property Name="CategoryID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="CategoryName" Type="Edm.String" MaxLength="15"/>
+                <Property Name="Description" Type="Edm.String"/>
+                <Property Name="Picture" Type="Edm.Stream"/>
+                <NavigationProperty Name="Products" Type="Collection(ProductService.Product)"/>
+            </EntityType>
+            <Annotations Target="ProductService.Category/Picture">
+                <Annotation Term="Core.MediaType" String="image/png"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
